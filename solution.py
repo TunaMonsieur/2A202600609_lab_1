@@ -316,12 +316,49 @@ compare_models.__module__ = _SAFE_MODULE_ALIAS
 # ---------------------------------------------------------------------------
 # Entry point for manual testing
 # ---------------------------------------------------------------------------
-if __name__ == "__main__":
-    test_prompt = "Explain the difference between temperature and top_p in one sentence."
-    print("=== Comparing models ===")
-    result = compare_models(test_prompt)
-    for key, value in result.items():
-        print(f"{key}: {value}")
+def _print_banner() -> None:
+    title = "LLM Playground - Day 1 Lab"
+    width = 64
+    print("\n" + "=" * width)
+    print(title.center(width))
+    print("=" * width)
+    print("1) Compare GPT-4o and GPT-4o-mini")
+    print("2) Start streaming chatbot")
+    print("3) Exit")
+    print("-" * width)
 
-    print("\n=== Starting chatbot (type 'quit' to exit) ===")
-    streaming_chatbot()
+
+def _run_compare_ui() -> None:
+    prompt = input("\nEnter prompt to compare: ").strip()
+    if not prompt:
+        print("Prompt cannot be empty.")
+        return
+
+    print("\nRunning comparison...")
+    result = compare_models(prompt)
+    print("\nResult")
+    print("-" * 64)
+    print(f"GPT-4o latency     : {result['gpt4o_latency']:.3f}s")
+    print(f"GPT-4o-mini latency: {result['mini_latency']:.3f}s")
+    print(f"GPT-4o est. cost   : ${result['gpt4o_cost_estimate']:.6f}")
+    print("-" * 64)
+    print(f"GPT-4o response:\n{result['gpt4o_response']}\n")
+    print(f"GPT-4o-mini response:\n{result['mini_response']}")
+    print("-" * 64)
+
+
+if __name__ == "__main__":
+    while True:
+        _print_banner()
+        choice = input("Choose an option (1-3): ").strip()
+
+        if choice == "1":
+            _run_compare_ui()
+        elif choice == "2":
+            print("\nChatbot mode. Type 'quit' or 'exit' to return.\n")
+            streaming_chatbot()
+        elif choice == "3":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please choose 1, 2, or 3.")

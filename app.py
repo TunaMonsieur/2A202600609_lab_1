@@ -9,7 +9,7 @@ from __future__ import annotations
 import os
 from typing import Generator
 
-from solution import (
+from solution.solution import (
     OPENAI_MODEL,
     call_openai,
     call_openai_mini,
